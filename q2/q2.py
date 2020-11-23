@@ -8,6 +8,7 @@
     c. Convert image into binary and obtain histogram of the image
 '''
 import cv2
+import os.path
 import sys
 import numpy
 from matplotlib import pyplot as plt 
@@ -53,8 +54,9 @@ def greyhist(filename):
     
     # calculate frequency of pixels in range 0-255 
     hist = cv2.calcHist([GrayFrame],[0],None,[256],[0,256])      #Frequency of pixels
+    plt.hist(GrayFrame.ravel(),256,[0,256],label="Frequency of pixel intensity for greyscale image");
     
-    plt.plot(hist,'k',label="Frequency of pixel intensity for greyscale image")
+    #plt.plot(hist,'k',label="Frequency of pixel intensity for greyscale image")
     plt.title("Plot of frequency of pixel intensity for greyscale image")
     plt.legend()
     plt.ylabel("Frequency")                     #Labels Y-axis
@@ -88,7 +90,8 @@ def binhist(filename):
     plt.grid()  
     plt.show()
     
-    
-#hist('img.png')
-#greyhist('img.png')
-#binhist('img.png')
+imgName = input("Image file name?")
+if(os.path.isfile(imgName)):
+    hist(imgName)
+    greyhist(imgName)
+    binhist(imgName)
