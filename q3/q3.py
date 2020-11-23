@@ -17,8 +17,15 @@ import sys
 import numpy as np
 
 Frame = cv2.imread('A.jpg',cv2.IMREAD_GRAYSCALE)
-kernel = np.ones((5,5),np.uint8)
-iterationNo = 4
+size = 0
+while(size<1 or size%2==0):
+    size = int(input('Enter kernel size (e.g. 3,5):\t'))
+    if(size<1):
+        print('Please enter an appropriate kernel size (>=1).')
+    if(size%2==0):
+        print('Kernel size must be odd. Enter an odd no.')
+kernel = np.ones((size,size),np.uint8)
+iterationNo = 1
 
 #For Erosion
 erosion = cv2.erode(Frame,kernel,iterations = iterationNo)
@@ -35,3 +42,22 @@ cv2.imwrite('opening.jpg',opening)
 #For closing
 closing = cv2.morphologyEx(Frame, cv2.MORPH_CLOSE, kernel)
 cv2.imwrite('closing.jpg',closing)
+
+#For thickening
+print("For thickening : ")
+while (iterationNo<2):
+    iterationNo = int(input('Enter the number of iterations : '))
+    if (iterationNo<2):
+        print('Please enter an appropriate iteration number.')
+thickening = cv2.dilate(Frame,kernel,iterations = iterationNo)
+cv2.imwrite('thickening.jpg',thickening)
+
+#For Thinning
+print("For thinning : ")
+iterationNo = 1
+while (iterationNo<2):
+    iterationNo = int(input('Enter the number of iterations : '))
+    if (iterationNo<2):
+        print('Please enter an appropriate iteration number.')
+thinning = cv2.erode(Frame,kernel,iterations = iterationNo)
+cv2.imwrite('thinning.jpg',thinning)
