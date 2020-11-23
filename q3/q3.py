@@ -61,3 +61,18 @@ while (iterationNo<2):
         print('Please enter an appropriate iteration number.')
 thinning = cv2.erode(Frame,kernel,iterations = iterationNo)
 cv2.imwrite('thinning.jpg',thinning)
+
+#For Skeletonization
+ret,img = cv2.threshold(Frame, 127, 255, 0)                     #Thresholding
+size = np.size(img)                                             #Create an empty skeleton
+skel = np.zeros(img.shape, np.uint8)
+element = cv2.getStructuringElement(cv2.MORPH_CROSS, (3,3))     #Get a Cross Shaped Kernel
+while True:
+    open = cv2.morphologyEx(img, cv2.MORPH_OPEN, element)       #Open the image
+    temp = cv2.subtract(img, open)                              #Substract open from the original image
+    eroded = cv2.erode(img, element)                            #Erode the original image and refine the skeleton
+    skel = cv2.bitwise_or(skel,temp)
+    img = eroded.copy()
+    if cv2.countNonZero(img)==0:                                #If there are no white pixels left ie.. the image has been completely eroded, quit the loop
+        break
+cv2.imwrite("skeleton.jpg",skel)
